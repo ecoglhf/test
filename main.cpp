@@ -110,20 +110,21 @@ private:
 //================================================================================
 
 bool openBox(uint32_t y, uint32_t x) {
-    if(y == 0 || x == 0) return false; // if box is empty, it is already unlocked
-
     SecureBox box(y, x);
-
-    for (int i = y - 1; i >= 0; --i) {
-        for (int j = x - 1; j >= 0; --j) {
-            if (box.getState()[i][j]) {
+    auto state = box.getState();
+    
+    for (int i = y-1; i >= 0; i--) {
+        for (int j = x-1; j >= 0; j--) {
+            if (state[i][j]) {
                 box.toggle(i, j);
+                state = box.getState(); // upd state after every toggle 
             }
         }
     }
-
+    
     return box.isLocked();
 }
+
 
 
 int main(int argc, char* argv[])
